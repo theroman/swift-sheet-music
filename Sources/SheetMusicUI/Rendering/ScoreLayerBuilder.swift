@@ -176,8 +176,10 @@ public enum ScoreLayerBuilder {
         previousSelection: SelectionRenderState,
         newSelection: SelectionRenderState,
     ) {
-        let toReset = previousSelection.selectedIDs
-            .subtracting(newSelection.selectedIDs)
+        // Rhythm Kata: items with their own colour are tinted as selected ones are.
+        let previousIDs = previousSelection.selectedIDs.union(previousSelection.itemColors.keys)
+        let newIDs = newSelection.selectedIDs.union(newSelection.itemColors.keys)
+        let toReset = previousIDs.subtracting(newIDs)
         for id in toReset {
             guard let layers = items[id] else { continue }
             for layer in layers {
@@ -192,9 +194,9 @@ public enum ScoreLayerBuilder {
                 }
             }
         }
-        for id in newSelection.selectedIDs {
+        for id in newIDs {
             guard let layers = items[id] else { continue }
-            let color = newSelection.voiceColors[id.voiceIndex] ?? inkColor
+            let color = newSelection.itemColors[id] ?? newSelection.voiceColors[id.voiceIndex] ?? inkColor
             for layer in layers {
                 if layer.fillColor != nil {
                     layer.fillColor = color

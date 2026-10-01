@@ -28,6 +28,8 @@ public struct ScoreView: View {
     private let providedDocument: LayoutDocument?
     private let selection: ScoreSelection
     private let voiceColors: [Int: Color]
+    /// Rhythm Kata: a colour per note or rest, whether selected or not.
+    private let itemColors: [ScoreItemID: Color]
     private let playbackCursor: ScoreCursor?
     private let playbackCursorColor: Color
 
@@ -36,6 +38,7 @@ public struct ScoreView: View {
         options: ScoreViewOptions = .init(),
         selection: ScoreSelection = .none,
         voiceColors: [Int: Color] = [:],
+        itemColors: [ScoreItemID: Color] = [:],
         playbackCursor: ScoreCursor? = nil,
         playbackCursorColor: Color = Color.blue.opacity(0.15),
         availableWidth: CGFloat? = nil,
@@ -47,6 +50,7 @@ public struct ScoreView: View {
         providedDocument = nil
         self.selection = selection
         self.voiceColors = voiceColors
+        self.itemColors = itemColors
         self.playbackCursor = playbackCursor
         self.playbackCursorColor = playbackCursorColor
     }
@@ -70,6 +74,7 @@ public struct ScoreView: View {
         options: ScoreViewOptions = .init(),
         selection: ScoreSelection = .none,
         voiceColors: [Int: Color] = [:],
+        itemColors: [ScoreItemID: Color] = [:],
         playbackCursor: ScoreCursor? = nil,
         playbackCursorColor: Color = Color.blue.opacity(0.15),
     ) {
@@ -80,6 +85,7 @@ public struct ScoreView: View {
         providedDocument = document
         self.selection = selection
         self.voiceColors = voiceColors
+        self.itemColors = itemColors
         self.playbackCursor = playbackCursor
         self.playbackCursorColor = playbackCursorColor
     }
@@ -88,6 +94,7 @@ public struct ScoreView: View {
         let selState = SelectionRenderState.make(
             selection: selection,
             voiceColors: voiceColors,
+            itemColors: itemColors,
             score: score,
         )
         if let doc = providedDocument {

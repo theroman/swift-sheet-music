@@ -16,6 +16,8 @@ import SwiftUI
 struct SelectionRenderState {
     let selectedIDs: Set<ScoreItemID>
     let voiceColors: [Int: CGColor]
+    /// Rhythm Kata: a colour per note or rest (grades, a focus), drawn whether selected or not.
+    var itemColors: [ScoreItemID: CGColor] = [:]
     let drawRangeBox: Bool
     let rangeBoxColor: CGColor
 
@@ -34,11 +36,23 @@ struct SelectionRenderState {
     /// the item is not selected or the caller did not supply a color
     /// for that voice.
     func color(for id: ScoreItemID, voiceIndex: Int) -> CGColor? {
+        if let own = itemColors[id] { return own }
         guard selectedIDs.contains(id) else { return nil }
         return voiceColors[voiceIndex]
     }
 
     static func make(
+        selection: ScoreSelection,
+        voiceColors: [Int: Color],
+        itemColors: [ScoreItemID: Color] = [:],
+        score: Score,
+    ) -> SelectionRenderState {
+        var state = makeSelection(selection: selection, voiceColors: voiceColors, score: score)
+        state.itemColors = itemColors.mapValues(resolveCGColor)
+        return state
+    }
+
+    private static func makeSelection(
         selection: ScoreSelection,
         voiceColors: [Int: Color],
         score: Score,
