@@ -187,7 +187,7 @@ public struct ScoreView: View {
             height: doc.size.height,
             alignment: .topLeading,
         )
-        .background(Color.white)
+        .background(Color.clear) // Rhythm Kata: on whatever paper the app puts behind it
         .environment(\.colorScheme, .light)
     }
 
@@ -237,7 +237,7 @@ public struct ScoreView: View {
                 )
             }
             .frame(width: doc.size.width, alignment: .leading)
-            .background(Color.white)
+            .background(Color.clear) // Rhythm Kata: on whatever paper the app puts behind it
             .environment(\.colorScheme, .light)
         }
     }
