@@ -22,7 +22,8 @@ extension ScoreLayerBuilder {
         for origin in system.staffOrigins {
             let path = CGMutablePath()
             let width = staffEndX - origin.x
-            for i in 0 ..< 5 {
+            // Rhythm Kata: a one-line (percussion) staff, the middle line only.
+            for i in 2 ... 2 {
                 let y = origin.y + CGFloat(i) * metrics.sp
                 path.move(to: CGPoint(x: origin.x, y: y))
                 path.addLine(

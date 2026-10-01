@@ -22,7 +22,8 @@ enum StaffRenderer {
         width: CGFloat,
         metrics: StaffMetrics,
     ) {
-        for i in 0 ..< 5 {
+        // Rhythm Kata: a one-line (percussion) staff, the middle line only.
+        for i in 2 ... 2 {
             let y = origin.y + CGFloat(i) * metrics.sp
             var path = Path()
             path.move(to: CGPoint(x: origin.x, y: y))
