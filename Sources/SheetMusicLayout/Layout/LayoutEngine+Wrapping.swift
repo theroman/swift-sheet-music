@@ -91,6 +91,9 @@ extension LayoutEngine {
             ) + metrics.sp * 0.8
             : 0
         let bracketGutter = max(columnGutter, braceGutter)
+        // Rhythm Kata: no labels and no brackets, no indent at all (the
+        // staff starts at the system's left edge).
+        if widest == 0 && bracketGutter == 0 { return 0 }
         return max(floor, widest + pad) + bracketGutter
     }
 
