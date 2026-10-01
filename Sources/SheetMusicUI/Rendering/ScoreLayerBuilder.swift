@@ -73,7 +73,7 @@ public enum ScoreLayerBuilder {
             size: CGSize(width: system.size.width, height: height),
         )
         root.masksToBounds = false
-        root.backgroundColor = CGColor(gray: 1, alpha: 1)
+        root.backgroundColor = nil // Rhythm Kata: clear, on the app's paper
 
         drawStaves(system: system, metrics: metrics, height: height, into: root)
         drawSystemBar(system: system, metrics: metrics, height: height, into: root)

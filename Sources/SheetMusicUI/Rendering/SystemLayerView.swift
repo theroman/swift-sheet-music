@@ -106,7 +106,7 @@ struct SystemLayerView: View {
         override init(frame frameRect: NSRect) {
             super.init(frame: frameRect)
             wantsLayer = true
-            layer?.backgroundColor = CGColor(gray: 1, alpha: 1)
+            layer?.backgroundColor = nil // Rhythm Kata: clear
             layer?.masksToBounds = false
         }
 
@@ -206,7 +206,7 @@ struct SystemLayerView: View {
 
         override init(frame: CGRect) {
             super.init(frame: frame)
-            backgroundColor = .white
+            backgroundColor = .clear // Rhythm Kata: clear
         }
 
         @available(*, unavailable)
