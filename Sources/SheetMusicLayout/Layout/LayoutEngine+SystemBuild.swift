@@ -712,7 +712,8 @@ extension LayoutEngine {
             // ONLY. Engraving convention places a single number
             // above the topmost staff at the start of each system.
             // Irregular measures (anacrusis) suppress the label.
-            if j == 0, !staves.isEmpty,
+            // Rhythm Kata: no measure numbers (a sheet of a few bars to read, not a score to find a place in).
+            if false, j == 0, !staves.isEmpty,
                let displayed = context.score.displayedMeasureNumber(
                    at: measureIdx,
                )
