@@ -192,6 +192,17 @@ enum MusicXMLMeasureWalker {
                     for element in elements {
                         perStaff[staffIdx].append(element, toVoice: voice)
                     }
+                    // Tuplets: a `<tuplet>` notation starts or ends a group at this note.
+                    let modification = child.first("time-modification")
+                    let actual = modification?.first("actual-notes").flatMap { Int($0.text) } ?? 3
+                    let normal = modification?.first("normal-notes").flatMap { Int($0.text) } ?? 2
+                    for notations in child.children where notations.name == "notations" {
+                        for tuplet in notations.children where tuplet.name == "tuplet" {
+                            if let type = tuplet.attributes["type"] {
+                                perStaff[staffIdx].markTuplet(type, actual: actual, normal: normal, voice: voice)
+                            }
+                        }
+                    }
                 }
                 // Glissando / slide events on this note: record the
                 // chord's voice + index now (after append) so the

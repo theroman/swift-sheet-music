@@ -11,6 +11,9 @@ import SheetMusicCore
 struct StaffMeasureBuilder {
     private var voiceIndex: [String: Int] = [:]
     private var voices: [[VoiceElement]] = []
+    /// Tuplets read from `<notations><tuplet type="start|stop">`, per voice index, and the one open in each voice.
+    private var tuplets: [Int: [Tuplet]] = [:]
+    private var openTuplets: [Int: (start: Int, actual: Int, normal: Int)] = [:]
     private var defaultVoiceId: String?
     private var startRepeat = false
     private var endRepeatCount: Int?
@@ -68,6 +71,23 @@ struct StaffMeasureBuilder {
     mutating func append(_ element: VoiceElement, toVoice voiceId: String) {
         let idx = internVoice(voiceId)
         voices[idx].append(element)
+    }
+
+    /// Marks the voice's last element as a tuplet's first (`start`) or last (`stop`) member, from a note's
+    /// `<tuplet>` notation and `<time-modification>` (3 in the time of 2 when it has none).
+    mutating func markTuplet(_ type: String, actual: Int, normal: Int, voice voiceId: String) {
+        let idx = internVoice(voiceId)
+        let last = voices[idx].count - 1
+        guard last >= 0 else { return }
+        switch type {
+        case "start":
+            openTuplets[idx] = (start: last, actual: actual, normal: normal)
+        case "stop":
+            guard let open = openTuplets.removeValue(forKey: idx) else { return }
+            tuplets[idx, default: []].append(Tuplet(normalNotes: open.normal, actualNotes: open.actual, startIndex: open.start, endIndex: last))
+        default:
+            break
+        }
     }
 
     func elements(forVoice voiceId: String) -> [VoiceElement] {
@@ -129,7 +149,7 @@ struct StaffMeasureBuilder {
         }
         let builtVoices = final.isEmpty
             ? [Voice(elements: [])]
-            : final.map { Voice(elements: $0) }
+            : final.enumerated().map { Voice(elements: $0.element, tuplets: tuplets[$0.offset] ?? []) }
         let measure = Measure(
             voices: builtVoices,
             startRepeat: startRepeat,
